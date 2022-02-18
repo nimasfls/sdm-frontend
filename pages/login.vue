@@ -5,12 +5,14 @@
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
-              <v-toolbar color="primary">
+              <v-toolbar color="primary" dark>
                 <v-toolbar-title>صفحه ورود</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <v-text-field
+                    id="username"
+                    v-model="username"
                     prepend-icon="mdi-account"
                     name="login"
                     label="نام کاربری"
@@ -18,6 +20,7 @@
                   ></v-text-field>
                   <v-text-field
                     id="password"
+                    v-model="password"
                     prepend-icon="mdi-key"
                     name="password"
                     label="رمز عبور"
@@ -26,8 +29,8 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" @click.stop='login()'>ورود</v-btn>
+                <v-btn color="primary" @click.stop="login()" >ورود</v-btn>
+                <v-btn color="indigo lighten-5" @click.stop="signup()" >ثبت نام</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -38,25 +41,25 @@
 </template>
 
 <script>
-import {  } from 'vuex';
-
 export default {
   name: 'loginPage',
   layout: 'empty',
+  data: () => ({
+    username: '',
+    password: '',
+  }),
   methods: {
     async login() {
-      console.log(this.$store)
       await this.$store.dispatch('auth/login', {
-        username: 'asd', password: 'qwe'
+        username: this.username,
+        password: this.password,
       });
-      // const result = await axios.post('http://localhost:8000/auth/login', {username: 'test', password: 'test'});
-      // await axios.get('http://localhost:8000/auth/test')
-      // await axios.get('http://localhost:8000/auth/refresh')
-      // await axios.get('http://localhost:8000/auth/access')
-      // console.log(result)
+    },
+    async signup() {
+
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped></style>

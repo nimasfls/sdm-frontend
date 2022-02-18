@@ -11,27 +11,40 @@
  */
 
 export interface LoginRequestDto {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
 export interface LoginResponseDto {
-  id: number
+  id: number;
 }
 
 export namespace Auth {
   /**
    * No description
-   * @name AuthControllerLoginByPhoneNumberPanel
+   * @name AuthControllerLogin
    * @request POST:/auth/login
    * @response `201` `LoginResponseDto`
    */
-  export namespace AuthControllerLoginByPhoneNumberPanel {
-    export type RequestParams = {}
-    export type RequestQuery = {}
-    export type RequestBody = LoginRequestDto
-    export type RequestHeaders = {}
-    export type ResponseBody = LoginResponseDto
+  export namespace AuthControllerLogin {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = LoginRequestDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = LoginResponseDto;
+  }
+  /**
+   * No description
+   * @name AuthControllerLogout
+   * @request POST:/auth/logout
+   * @response `201` `void`
+   */
+  export namespace AuthControllerLogout {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
   /**
    * No description
@@ -40,11 +53,11 @@ export namespace Auth {
    * @response `200` `void`
    */
   export namespace AuthControllerRefresh {
-    export type RequestParams = {}
-    export type RequestQuery = {}
-    export type RequestBody = never
-    export type RequestHeaders = {}
-    export type ResponseBody = void
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
   /**
    * No description
@@ -53,11 +66,11 @@ export namespace Auth {
    * @response `200` `void`
    */
   export namespace AuthControllerAccess {
-    export type RequestParams = {}
-    export type RequestQuery = {}
-    export type RequestBody = never
-    export type RequestHeaders = {}
-    export type ResponseBody = void
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
   /**
    * No description
@@ -66,11 +79,11 @@ export namespace Auth {
    * @response `200` `void`
    */
   export namespace AuthControllerTest {
-    export type RequestParams = {}
-    export type RequestQuery = {}
-    export type RequestBody = never
-    export type RequestHeaders = {}
-    export type ResponseBody = void
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
 }
 
@@ -79,38 +92,38 @@ import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   ResponseType,
-} from 'axios'
+} from 'axios';
 
-export type QueryParamsType = Record<string | number, any>
+export type QueryParamsType = Record<string | number, any>;
 
 export interface FullRequestParams
   extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
   /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean
+  secure?: boolean;
   /** request path */
-  path: string
+  path: string;
   /** content type of request body */
-  type?: ContentType
+  type?: ContentType;
   /** query params */
-  query?: QueryParamsType
+  query?: QueryParamsType;
   /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseType
+  format?: ResponseType;
   /** request body */
-  body?: unknown
+  body?: unknown;
 }
 
 export type RequestParams = Omit<
   FullRequestParams,
   'body' | 'method' | 'query' | 'path'
->
+>;
 
 export interface ApiConfig<SecurityDataType = unknown>
   extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
   securityWorker?: (
     securityData: SecurityDataType | null
-  ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void
-  secure?: boolean
-  format?: ResponseType
+  ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
+  secure?: boolean;
+  format?: ResponseType;
 }
 
 export enum ContentType {
@@ -120,11 +133,11 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public instance: AxiosInstance
-  private securityData: SecurityDataType | null = null
-  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker']
-  private secure?: boolean
-  private format?: ResponseType
+  public instance: AxiosInstance;
+  private securityData: SecurityDataType | null = null;
+  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
+  private secure?: boolean;
+  private format?: ResponseType;
 
   constructor({
     securityWorker,
@@ -135,15 +148,15 @@ export class HttpClient<SecurityDataType = unknown> {
     this.instance = axios.create({
       ...axiosConfig,
       baseURL: axiosConfig.baseURL || '',
-    })
-    this.secure = secure
-    this.format = format
-    this.securityWorker = securityWorker
+    });
+    this.secure = secure;
+    this.format = format;
+    this.securityWorker = securityWorker;
   }
 
   public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data
-  }
+    this.securityData = data;
+  };
 
   private mergeRequestParams(
     params1: AxiosRequestConfig,
@@ -158,12 +171,12 @@ export class HttpClient<SecurityDataType = unknown> {
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
-    }
+    };
   }
 
   private createFormData(input: Record<string, unknown>): FormData {
     return Object.keys(input || {}).reduce((formData, key) => {
-      const property = input[key]
+      const property = input[key];
       formData.append(
         key,
         property instanceof Blob
@@ -171,9 +184,9 @@ export class HttpClient<SecurityDataType = unknown> {
           : typeof property === 'object' && property !== null
           ? JSON.stringify(property)
           : `${property}`
-      )
-      return formData
-    }, new FormData())
+      );
+      return formData;
+    }, new FormData());
   }
 
   public request = async <T = any, _E = any>({
@@ -189,9 +202,9 @@ export class HttpClient<SecurityDataType = unknown> {
       ((typeof secure === 'boolean' ? secure : this.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
-      {}
-    const requestParams = this.mergeRequestParams(params, secureParams)
-    const responseFormat = (format && this.format) || void 0
+      {};
+    const requestParams = this.mergeRequestParams(params, secureParams);
+    const responseFormat = (format && this.format) || void 0;
 
     if (
       type === ContentType.FormData &&
@@ -199,11 +212,11 @@ export class HttpClient<SecurityDataType = unknown> {
       body !== null &&
       typeof body === 'object'
     ) {
-      requestParams.headers.common = { Accept: '*/*' }
-      requestParams.headers.post = {}
-      requestParams.headers.put = {}
+      requestParams.headers.common = { Accept: '*/*' };
+      requestParams.headers.post = {};
+      requestParams.headers.put = {};
 
-      body = this.createFormData(body as Record<string, unknown>)
+      body = this.createFormData(body as Record<string, unknown>);
     }
 
     return this.instance.request({
@@ -218,8 +231,8 @@ export class HttpClient<SecurityDataType = unknown> {
       responseType: responseFormat,
       data: body,
       url: path,
-    })
-  }
+    });
+  };
 }
 
 /**
@@ -243,26 +256,37 @@ export class Api<
       method: 'GET',
       format: 'json',
       ...params,
-    })
+    });
 
   auth = {
     /**
      * No description
      *
-     * @name AuthControllerLoginByPhoneNumberPanel
+     * @name AuthControllerLogin
      * @request POST:/auth/login
      * @response `201` `LoginResponseDto`
      */
-    authControllerLoginByPhoneNumberPanel: (
-      data: LoginRequestDto,
-      params: RequestParams = {}
-    ) =>
+    authControllerLogin: (data: LoginRequestDto, params: RequestParams = {}) =>
       this.request<LoginResponseDto, any>({
         path: `/auth/login`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
         format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name AuthControllerLogout
+     * @request POST:/auth/logout
+     * @response `201` `void`
+     */
+    authControllerLogout: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/auth/logout`,
+        method: 'POST',
         ...params,
       }),
 
@@ -307,5 +331,5 @@ export class Api<
         method: 'GET',
         ...params,
       }),
-  }
+  };
 }

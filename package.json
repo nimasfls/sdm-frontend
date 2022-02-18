@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "api-gen": "ts-node ./plugins/generate-api.ts",
+    "api-gen": "ts-node api/generate-api.ts",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -14,6 +14,7 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
     "axios": "^0.26.0",
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
