@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "api-gen": "ts-node ./plugins/generate-api.ts",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -13,26 +14,32 @@
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.6",
+    "axios": "^0.26.0",
     "core-js": "^3.19.3",
     "nuxt": "^2.15.8",
+    "swagger-typescript-codegen": "^3.2.4",
     "vue": "^2.6.14",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
     "vuetify": "^2.6.1",
+    "vuex-class-component": "^2.3.6",
     "webpack": "^4.46.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config-typescript": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "^1.12.3",
+    "@types/axios": "^0.14.0",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-nuxt": "^3.1.0",
     "eslint-plugin-vue": "^8.2.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "swagger-typescript-api": "^9.3.1",
+    "ts-node": "^10.5.0"
   }
 }
