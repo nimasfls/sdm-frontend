@@ -2,28 +2,38 @@ import { GetterTree, ActionTree, MutationTree } from 'vuex';
 import { LoginRequestDto } from '~/api/http-client';
 
 export const state = () => ({
-  user: { id: null } as { id: number | null },
+  user: null as { id: number } | null,
+  isLoggedIn: false,
 });
 
 export type AuthStoreType = ReturnType<typeof state>;
 
 export const getters: GetterTree<AuthStoreType, AuthStoreType> = {
   user: (state) => state.user,
+  isLoggedIn: (state) => state.isLoggedIn,
 };
 
 export const mutations: MutationTree<AuthStoreType> = {
-  setUser: (state, payload: { id: number | null }) => {
+  user: (state, payload: { id: number } | null) => {
     state.user = payload;
+  },
+  isLoggedIn: (state, payload) => {
+    state.isLoggedIn = payload;
   },
 };
 
 export const actions: ActionTree<AuthStoreType, AuthStoreType> = {
   async login({ commit }, dto: LoginRequestDto) {
     const { data } = await this.$api.auth.authControllerLogin(dto);
-    commit('setUser', data);
+    console.log(data);
+    commit('user', data);
+    commit('isLoggedIn', true);
+    this.$router.push('/home');
   },
-  async logout() {
+  async logout({ commit }) {
     await this.$api.auth.authControllerLogout();
+    commit('isLoggedIn', false);
+    commit('user', null);
     this?.$router?.push('/login');
   },
 };
