@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire" :dark="false">
+  <v-app id="login" :dark="false">
     <v-main>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
@@ -42,7 +42,7 @@
 
 <script>
 export default {
-  name: 'loginPage',
+  name: 'login',
   layout: 'empty',
   data: () => ({
     username: '',
